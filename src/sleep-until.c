@@ -17,7 +17,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include <sys/timerfd.h>
-#include <alloca.h>
 #include <string.h>
 #include <stdlib.h>
 
@@ -27,7 +26,8 @@ int main(int argc, char* argv[])
 {
   char* argv0;
   char float_part[10];
-  struct itimerspec* values;
+  struct itimerspec value;
+  struct itimerspec largest_value;
   int i;
   
   if (argc < 2)
@@ -36,8 +36,7 @@ int main(int argc, char* argv[])
   argv0 = argv[0];
   argc--, argv--;
   
-  values = alloca(argc * sizeof(*values));
-  memset(values, 0, argc * sizeof(*values));
+  memset(&value, 0, sizeof(value));
   float_part[9] = '\0';
   for (i = 0; i < argc; i++)
     {
@@ -48,7 +47,7 @@ int main(int argc, char* argv[])
       if (p2)
 	*p2++ = '\0';
       
-      values[i].it_value.tv_sec = (time_t)atoll(p1);
+      value.it_value.tv_sec = (time_t)atoll(p1);
       
       if (p2)
 	{
@@ -57,11 +56,20 @@ int main(int argc, char* argv[])
 	  excess = len > 9 ? p2[9] : '0';
 	  len = len > 9 ? 9 : len;
 	  memcpy(float_part + 9 - len, p2, len * sizeof(char));
-	  values[i].it_value.tv_nsec = atol(float_part);
-	  if ((excess >= '5') && (values[i].it_value.tv_nsec++ == 999999999L))
-	    values[i].it_value.tv_nsec = 0, values[i].it_value.tv_sec++;
+	  value.it_value.tv_nsec = atol(float_part);
+	  if ((excess >= '5') && (value.it_value.tv_nsec++ == 999999999L))
+	    value.it_value.tv_nsec = 0, value.it_value.tv_sec++;
 	}
+      
+      if (i == 0)
+	largest_value = value;
+      else if (value.it_value.tv_sec > largest_value.it_value.tv_sec)
+	largest_value = value;
+      else if (value.it_value.tv_nsec > largest_value.it_value.tv_nsec)
+	largest_value = value;
     }
+  
+  
   
   return 0;
 }
