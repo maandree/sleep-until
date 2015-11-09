@@ -1,0 +1,91 @@
+\input texinfo   @c -*-texinfo-*-
+
+@c %**start of header
+@setfilename sleep-until.info
+@settitle sleep-until
+@afourpaper
+@documentencoding UTF-8
+@documentlanguage en
+@finalout
+@c %**end of header
+
+
+@dircategory Miscellaneous
+@direntry
+* sleep-until: (sleep-until).        Sleep until a specified time
+@end direntry
+
+
+@copying
+Copyright @copyright{} 2015 Mattias Andrée
+
+@quotation
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with no
+Invariant Sections, with no Front-Cover Texts, and with no Back-Cover
+Texts. A copy of the license is included in the section entitled
+``GNU Free Documentation License''.
+@end quotation
+@end copying
+
+@ifnottex
+@node Top
+@top sleep-until -- Sleep until a specified time
+@insertcopying
+@end ifnottex
+
+@titlepage
+@title sleep-until
+@subtitle Sleep until a specified time
+@author by Mattias Andrée (maandree)
+
+@page
+@c @center `'
+@vskip 0pt plus 1filll
+@insertcopying
+@end titlepage
+
+@contents
+
+
+
+@menu
+* Overview::                        Brief overview of @command{sleep-until}.
+* Invoking::                        Invocation of @command{sleep-until}.
+* GNU Free Documentation License::  Copying and sharing this manual.
+@end menu
+
+
+
+@node Overview
+@chapter Overview
+
+Sleeps until a specified time.
+
+
+
+@node Invoking
+@chapter Invoking
+
+If invoked without any arguments, the programs
+will exit with exit value 0. Otherwise, the
+highest argument argument is select. They should
+be integers or floating-point values. The process
+will sleep until the selected time has been reached,
+and will not stop even if interrupted. The time
+should be specified as the number of seconds since
+Epoch (1970-(01)Jan-01), in UTC bt not accounting
+for leap seconds.
+
+Some versions of @command{date} can be used to
+specify the time point in a convenient manner.
+
+
+
+@node GNU Free Documentation License
+@appendix GNU Free Documentation License
+@include fdl.texinfo
+
+@bye
+

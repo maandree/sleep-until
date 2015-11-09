@@ -13,4 +13,8 @@ _/
 *.o
 *.su
 *.gch
+*.pdf
+*.ps
+*.dvi
+*.info
 

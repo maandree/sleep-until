@@ -89,7 +89,7 @@ int main(int argc, char* argv[])
       if (value.it_value.tv_sec == largest_value.it_value.tv_sec)
 	if (value.it_value.tv_nsec >= largest_value.it_value.tv_nsec)
 	  break;
-      if (read(fd, &_expirations, 8) < 8)
+      if (read(fd, &_expirations, (size_t)8) < 8)
 	{
 	  if (errno == EINTR)
 	    continue;
