@@ -34,6 +34,7 @@ int main(int argc, char* argv[])
   int i, fd = -1, clocks = 0;
   uint64_t _expirations;
   int clockid = CLOCK_REALTIME;
+  const char* clockstr = "CLOCK_REALTIME";
   
   if (argc < 2)
     return 0;
@@ -55,11 +56,11 @@ int main(int argc, char* argv[])
 $>cat /usr/include/bits/time.h | grep '^ *# *define  *CLOCK_' | grep -Po 'CLOCK_[^[:blank:]]*' |
 $>while read c; do
       else if (!strcmp(p1, "${c}"))
-	clockid = ${c};
+	clockid = ${c}, clockstr = "${c}";
 $>done
       else
-	clockid = -1;
-	clocks++;
+	clockid = -1, clockstr = "invalid";
+      clocks++;
       continue;
       
     parse_time:
@@ -80,7 +81,7 @@ $>done
 	    value.it_value.tv_nsec = 0, value.it_value.tv_sec++;
 	}
       
-      if (i == 0)
+      if (i == clocks)
 	largest_value = value;
       else if (value.it_value.tv_sec > largest_value.it_value.tv_sec)
 	largest_value = value;
@@ -97,6 +98,11 @@ $>done
     goto fail;
   if (timerfd_settime(fd, TFD_TIMER_ABSTIME, &largest_value, NULL))
     goto fail;
+  
+  if (clock_gettime(clockid, &(value.it_value)) == 0)
+    fprintf(stderr, "%s: sleeping until %lli.%09li (current time: %lli.%09li, clock: %s)\n",
+	    argv0, (long long int)(largest_value.it_value.tv_sec), largest_value.it_value.tv_nsec,
+	    (long long int)(value.it_value.tv_sec), value.it_value.tv_nsec, clockstr);
   
   for (;;)
     {
