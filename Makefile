@@ -18,6 +18,8 @@ DATADIR = $(PREFIX)$(DATA)
 DOCDIR = $(DATADIR)/doc
 # The info manual documentation path including prefix
 INFODIR = $(DATADIR)/info
+# The man page documentation path including prefix
+MANDIR = $(DATADIR)/man
 # The license base path including prefix.
 LICENSEDIR = $(DATADIR)/licenses
 
@@ -101,7 +103,7 @@ bin/%.ps: doc/info/%.texinfo doc/info/fdl.texinfo
 # Install rules.
 
 .PHONY: install
-install: install-base install-info
+install: install-base install-info install-man
 
 .PHONY: install
 install-all: install-base install-doc
@@ -132,7 +134,7 @@ install-license:
 # Install documentation.
 
 .PHONY: install-doc
-install-doc: install-info install-pdf install-ps install-dvi
+install-doc: install-info install-pdf install-ps install-dvi install-man
 
 .PHONY: install-info
 install-info: bin/sleep-until.info
@@ -154,6 +156,11 @@ install-dvi: bin/sleep-until.dvi
 	install -dm755 -- "$(DESTDIR)$(DOCDIR)"
 	install -m644 $< -- "$(DESTDIR)$(DOCDIR)/$(PKGNAME).dvi"
 
+.PHONY: install-man
+install-man:
+	install -dm755 -- "$(DESTDIR)$(MANDIR)/man1"
+	install -m644 doc/man/sleep-until.1 -- "$(DESTDIR)$(MANDIR)/man1/$(COMMAND).1"
+
 
 # Uninstall rules.
 
@@ -167,6 +174,7 @@ uninstall:
 	-rm -- "$(DESTDIR)$(DOCDIR)/$(PKGNAME).pdf"
 	-rm -- "$(DESTDIR)$(DOCDIR)/$(PKGNAME).ps"
 	-rm -- "$(DESTDIR)$(DOCDIR)/$(PKGNAME).dvi"
+	-rm -- "$(DESTDIR)$(MANDIR)/man1/$(COMMAND).1"
 
 
 # Clean rules.
