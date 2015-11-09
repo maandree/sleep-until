@@ -1,0 +1,15 @@
+NAME
+	sleep-until – sleeps until a specified time
+
+SYNOPSIS
+	sleep-until TIMEPOINT...
+
+DESCRIPTION
+	Pause until TIMEPOINT. TIMEPOINT is the number of seconds
+	since Epoch, in UTC but not accounting for leap seconds.
+	TIMEPOINT may be an arbitrary floating point number.
+	Pause is continued when interrupted.
+
+SEE ALSO
+	sleep(1)
+
