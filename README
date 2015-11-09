@@ -11,5 +11,5 @@ DESCRIPTION
 	Pause is continued when interrupted.
 
 SEE ALSO
-	sleep(1)
+	sleep(1), date(1)
 
