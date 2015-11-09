@@ -19,7 +19,10 @@
 #include <sys/timerfd.h>
 #include <string.h>
 #include <stdlib.h>
-
+#include <stdint.h>
+#include <stdio.h>
+#include <unistd.h>
+#include <errno.h>
 
 
 int main(int argc, char* argv[])
@@ -28,13 +31,14 @@ int main(int argc, char* argv[])
   char float_part[10];
   struct itimerspec value;
   struct itimerspec largest_value;
-  int i;
+  int i, fd = -1;
+  uint64_t _expirations;
   
   if (argc < 2)
     return 0;
   
   argv0 = argv[0];
-  argc--, argv--;
+  argc--, argv++;
   
   memset(&value, 0, sizeof(value));
   float_part[9] = '\0';
@@ -65,12 +69,39 @@ int main(int argc, char* argv[])
 	largest_value = value;
       else if (value.it_value.tv_sec > largest_value.it_value.tv_sec)
 	largest_value = value;
-      else if (value.it_value.tv_nsec > largest_value.it_value.tv_nsec)
-	largest_value = value;
+      else if (value.it_value.tv_sec == largest_value.it_value.tv_sec)
+	if (value.it_value.tv_nsec > largest_value.it_value.tv_nsec)
+	  largest_value = value;
     }
   
+  fd = timerfd_create(CLOCK_REALTIME, 0);
+  if (fd < 0)
+    goto fail;
+  if (timerfd_settime(fd, TFD_TIMER_ABSTIME, &largest_value, NULL))
+    goto fail;
   
+  for (;;)
+    {
+      if (clock_gettime(CLOCK_REALTIME, &(value.it_value)))
+	goto fail;
+      if (value.it_value.tv_sec > largest_value.it_value.tv_sec)
+        break;
+      if (value.it_value.tv_sec == largest_value.it_value.tv_sec)
+	if (value.it_value.tv_nsec >= largest_value.it_value.tv_nsec)
+	  break;
+      if (read(fd, &_expirations, 8) < 8)
+	{
+	  if (errno == EINTR)
+	    continue;
+	  goto fail;
+	}
+    }
   
+  close(fd);
   return 0;
+ fail:
+  perror(argv0);
+  if (fd >= 0)  close(fd);
+  return 1;
 }
 
