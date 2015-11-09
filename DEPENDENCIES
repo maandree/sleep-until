@@ -8,6 +8,9 @@ BUILD DEPENDENCIES:
 	libc (glibc>=2.8)
 	cc
 	make
+	coreutils
+	grep
+	gpp (https://github.com/maandree/gpp)
 	texinfo (opt-out, for info, pdf, ps and dvi manuals)
 	texlive-core (opt-in, for pdf, ps and dvi manuals)
 

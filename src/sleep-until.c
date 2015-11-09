@@ -31,8 +31,9 @@ int main(int argc, char* argv[])
   char float_part[10];
   struct itimerspec value;
   struct itimerspec largest_value;
-  int i, fd = -1;
+  int i, fd = -1, clocks = 0;
   uint64_t _expirations;
+  int clockid = CLOCK_REALTIME;
   
   if (argc < 2)
     return 0;
@@ -45,10 +46,24 @@ int main(int argc, char* argv[])
   for (i = 0; i < argc; i++)
     {
       char* p1 = argv[i];
-      char* p2 = strchr(p1, '.');
+      char* p2;
       char excess;
       size_t len;
-      if (p2)
+      
+      if (strstr(p1, "CLOCK_") != p1)
+	goto parse_time;
+$>cat /usr/include/bits/time.h | grep '^ *# *define  *CLOCK_' | grep -Po 'CLOCK_[^[:blank:]]*' |
+$>while read c; do
+      else if (!strcmp(p1, "${c}"))
+	clockid = ${c};
+$>done
+      else
+	clockid = -1;
+	clocks++;
+      continue;
+      
+    parse_time:
+      if ((p2 = strchr(p1, '.')))
 	*p2++ = '\0';
       
       value.it_value.tv_sec = (time_t)atoll(p1);
@@ -74,7 +89,10 @@ int main(int argc, char* argv[])
 	  largest_value = value;
     }
   
-  fd = timerfd_create(CLOCK_REALTIME, 0);
+  if (clocks == argc)
+    return 0;
+  
+  fd = timerfd_create(clockid, 0);
   if (fd < 0)
     goto fail;
   if (timerfd_settime(fd, TFD_TIMER_ABSTIME, &largest_value, NULL))
@@ -82,7 +100,7 @@ int main(int argc, char* argv[])
   
   for (;;)
     {
-      if (clock_gettime(CLOCK_REALTIME, &(value.it_value)))
+      if (clock_gettime(clockid, &(value.it_value)))
 	goto fail;
       if (value.it_value.tv_sec > largest_value.it_value.tv_sec)
         break;

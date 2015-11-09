@@ -30,6 +30,10 @@ PKGNAME = sleep-until
 COMMAND = sleep-until
 
 
+# The https://github.com/maandree/gpp command.
+GPP = gpp
+
+
 WARN = -Wall -Wextra -pedantic -Wdouble-promotion -Wformat=2 -Winit-self -Wmissing-include-dirs      \
        -Wtrampolines -Wmissing-prototypes -Wmissing-declarations -Wnested-externs                    \
        -Wno-variadic-macros -Wsync-nand -Wunsafe-loop-optimizations -Wcast-align                     \
@@ -62,9 +66,12 @@ bin/sleep-until: obj/sleep-until.o
 	@mkdir -p bin
 	$(CC) $(FLAGS) -o $@ $^ $(LDFLAGS)
 
-obj/sleep-until.o: src/sleep-until.c
-	@mkdir -p obj
+obj/sleep-until.o: obj/sleep-until.c
 	$(CC) $(FLAGS) -c -o $@ $< $(CFLAGS) $(CPPFLAGS)
+
+obj/sleep-until.c: src/sleep-until.c
+	@mkdir -p obj
+	gpp -s '$$' -i $< -o $@
 
 # Build rules for documentation.
 
