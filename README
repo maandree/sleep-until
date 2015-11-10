@@ -22,6 +22,15 @@ DESCRIPTION
 	(the proper implementation of a monotonic clock), and
 	CLOCK_TAI does not work.
 
+RATIONALE
+	Previously, the best wait to sleep until a specific time
+	was to use date, sleep, and arithmetics in Bash. This is
+	very inconvenient, and only allows sleep over a monotonic
+	clock.
+
+	This progam was written so that the author could combine
+	it with mplayer to construct a custom alarm clock.
+
 SEE ALSO
 	sleep(1), date(1)
 
