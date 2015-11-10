@@ -52,10 +52,10 @@ FLAGS = $(WARN) $(STD) $(OPTIMISE) -D_POSIX_C_SOURCE=199309L
 # Build rules.
 
 .PHONY: default
-default: command info
+default: command info shell
 
 .PHONY: all
-all: command doc
+all: command doc shell
 
 # Build rules for the command.
 
@@ -71,7 +71,7 @@ obj/sleep-until.o: obj/sleep-until.c
 
 obj/sleep-until.c: src/sleep-until.c
 	@mkdir -p obj
-	gpp -s '$$' -i $< -o $@
+	$(GPP) -s '$$' -i $< -o $@
 
 # Build rules for documentation.
 
@@ -106,14 +106,37 @@ bin/%.ps: doc/info/%.texinfo doc/info/fdl.texinfo
 	cd obj/ps ; yes X | texi2pdf --ps ../../$< < /dev/null
 	mv obj/ps/$*.ps $@
 
+# Build rules for shell auto-completion.
+
+.PHONY: shell
+shell: bash zsh fish
+
+.PHONY: bash
+bash: bin/sleep-until.bash
+bin/sleep-until.bash: src/completion
+	@mkdir -p bin
+	auto-auto-complete bash --output $@ --source $<
+
+.PHONY: zsh
+zsh: bin/sleep-until.zsh
+bin/sleep-until.zsh: src/completion
+	@mkdir -p bin
+	auto-auto-complete zsh --output $@ --source $<
+
+.PHONY: fish
+fish: bin/sleep-until.fish
+bin/sleep-until.fish: src/completion
+	@mkdir -p bin
+	auto-auto-complete fish --output $@ --source $<
+
 
 # Install rules.
 
 .PHONY: install
-install: install-base install-info install-man
+install: install-base install-info install-man install-shell
 
 .PHONY: install
-install-all: install-base install-doc
+install-all: install-base install-doc install-shell
 
 # Install base rules.
 
@@ -168,6 +191,26 @@ install-man:
 	install -dm755 -- "$(DESTDIR)$(MANDIR)/man1"
 	install -m644 doc/man/sleep-until.1 -- "$(DESTDIR)$(MANDIR)/man1/$(COMMAND).1"
 
+# Install shell auto-completion.
+
+.PHONY: install-shell
+install-shell: install-bash install-zsh install-fish
+
+.PHONY: install-bash
+install-bash: bin/sleep-until.bash
+	install -dm755 -- "$(DESTDIR)$(DATADIR)/bash-completion/completions"
+	install -m644 $< -- "$(DESTDIR)$(DATADIR)/bash-completion/completions/$(COMMAND)"
+
+.PHONY: install-zsh
+install-zsh: bin/sleep-until.zsh
+	install -dm755 -- "$(DESTDIR)$(DATADIR)/zsh/site-functions"
+	install -m644 $< -- "$(DESTDIR)$(DATADIR)/zsh/site-functions/_$(COMMAND)"
+
+.PHONY: install-fish
+install-fish: bin/sleep-until.fish
+	install -dm755 -- "$(DESTDIR)$(DATADIR)/fish/completions"
+	install -m644 $< -- "$(DESTDIR)$(DATADIR)/fish/completions/$(COMMAND).fish"
+
 
 # Uninstall rules.
 
@@ -182,6 +225,15 @@ uninstall:
 	-rm -- "$(DESTDIR)$(DOCDIR)/$(PKGNAME).ps"
 	-rm -- "$(DESTDIR)$(DOCDIR)/$(PKGNAME).dvi"
 	-rm -- "$(DESTDIR)$(MANDIR)/man1/$(COMMAND).1"
+	-rm -- "$(DESTDIR)$(DATADIR)/fish/completions/$(COMMAND).fish"
+	-rmdir -- "$(DESTDIR)$(DATADIR)/fish/completions"
+	-rmdir -- "$(DESTDIR)$(DATADIR)/fish"
+	-rm -- "$(DESTDIR)$(DATADIR)/zsh/site-functions/_$(COMMAND)"
+	-rmdir -- "$(DESTDIR)$(DATADIR)/zsh/site-functions"
+	-rmdir -- "$(DESTDIR)$(DATADIR)/zsh"
+	-rm -- "$(DESTDIR)$(DATADIR)/bash-completion/completions/$(COMMAND)"
+	-rmdir -- "$(DESTDIR)$(DATADIR)/bash-completion/completions"
+	-rmdir -- "$(DESTDIR)$(DATADIR)/bash-completion"
 
 
 # Clean rules.

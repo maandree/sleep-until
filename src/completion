@@ -1,0 +1,11 @@
+(sleep-until
+	(default (arg CLOCK_OR_TIME) (files -0) (suggest clock)
+		 (desc 'Select clock or exit time'))
+	
+	(suggestion clock (verbatim CLOCK_REALTIME
+				    CLOCK_MONOTONIC
+				    CLOCK_BOOTTIME
+				    CLOCK_REALTIME_ALARM
+				    CLOCK_BOOTTIME_ALARM))
+)
+
