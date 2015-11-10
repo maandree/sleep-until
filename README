@@ -2,13 +2,25 @@ NAME
 	sleep-until – sleeps until a specified time
 
 SYNOPSIS
-	sleep-until TIMEPOINT...
+	sleep-until CLOCKNAME... TIMEPOINT...
 
 DESCRIPTION
 	Pause until TIMEPOINT. TIMEPOINT is the number of seconds
-	since Epoch, in UTC but not accounting for leap seconds.
+	since Epoch, in UTC but not accounting for leap seconds,
+	by default. If CLOCKNAME is specifed, TIMEPOINT is the
+	number of seconds since the zerotime of that clock.
 	TIMEPOINT may be an arbitrary floating point number.
 	Pause is continued when interrupted.
+
+	On Linux 4.2.2 the clocks that can be used are:
+	* CLOCK_REALTIME
+	* CLOCK_MONOTONIC
+	* CLOCK_BOOTTIME
+	* CLOCK_REALTIME_ALARM
+	* CLOCK_BOOTTIME_ALARM
+	Note that the neither course clocks, CLOCK_MONOTONIC_RAW
+	(the proper implementation of a monotonic clock), and
+	CLOCK_TAI does not work.
 
 SEE ALSO
 	sleep(1), date(1)

@@ -61,25 +61,55 @@ Texts. A copy of the license is included in the section entitled
 @node Overview
 @chapter Overview
 
-Sleeps until a specified time.
+Sleeps until a specified time. @command{sleep-until}
+only supports the time to be specified by number of
+seconds (and nanoseconds) since an epoch. The program
+supports multiple clocks: all clocks supported by
+timerfd.
 
 
 
 @node Invoking
 @chapter Invoking
 
-If invoked without any arguments, the programs
-will exit with exit value 0. Otherwise, the
-highest argument argument is select. They should
-be integers or floating-point values. The process
-will sleep until the selected time has been reached,
-and will not stop even if interrupted. The time
-should be specified as the number of seconds since
-Epoch (1970-(01)Jan-01), in UTC bt not accounting
+@command{sleep-until} takes any number of arguments,
+of two classes: clock name and time point. The last
+specified clock name and the highest time point will
+be used. The time point may be a floating-point number.
+
+If no time point is specified, the program will exit
+with exit value 0. Otherwise the process will terminate,
+with exit value 0, when the selected time has been
+reached.
+
+Note that it is not possible to wait on two or more
+clocks at the same time. Rather, you need invoke
+@command{sleep-until} multiple times with different
+clocks. This is because the order of the arguments
+must not be important.
+
+By default, the clock @code{CLOCK_REALTIME} is used.
+In this case, the process will terminate at the
+selected number of seconds of the Epoch
+(1970-(01)Jan-01 00:00:00), in UTC but not accounting
 for leap seconds.
 
 Some versions of @command{date} can be used to
 specify the time point in a convenient manner.
+
+The clock is select by the name of the clock.
+On Linux 4.2.2 the clock that can be used are:
+@itemize @bullet{}
+@item @code{CLOCK_REALTIME}
+@item @code{CLOCK_MONOTONIC}
+@item @code{CLOCK_BOOTTIME}
+@item @code{CLOCK_REALTIME_ALARM}
+@item @code{CLOCK_BOOTTIME_ALARM}
+@end itemize
+@noindent
+Note that the neither course clocks, @code{CLOCK_MONOTONIC_RAW}
+(the proper implementation of a monotonic clock), and
+@code{CLOCK_TAI} does not work.
 
 
 
