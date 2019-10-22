@@ -1,0 +1,8 @@
+PREFIX = /usr
+MANPREFIX = $(PREFIX)/share/man
+
+CC = cc
+
+CPPFLAGS = -D_POSIX_C_SOURCE=199309L
+CFLAGS   = -std=c99 -Wall -O2
+LDFLAGS  = -s

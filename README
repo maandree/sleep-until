@@ -1,8 +1,8 @@
 NAME
-	sleep-until – sleeps until a specified time
+	sleep-until – sleep until a specified time
 
 SYNOPSIS
-	sleep-until CLOCKNAME... TIMEPOINT...
+	sleep-until [CLOCKNAME | TIMEPOINT] ...
 
 DESCRIPTION
 	Pause until TIMEPOINT. TIMEPOINT is the number of seconds
@@ -33,4 +33,3 @@ RATIONALE
 
 SEE ALSO
 	sleep(1), date(1)
-

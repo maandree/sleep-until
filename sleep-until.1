@@ -1,0 +1,47 @@
+.TH SLEEP-UNTIL 1
+.SH NAME
+sleep-until - sleep until a specified time
+.SH SYNOPSIS
+.B sleep-until
+.RI [ clockname
+|
+.IR timepoint ]\ ...
+.SH DESCRIPTION
+Pause until \fItimepoint\fP. \fItimepoint\fP is the number of
+seconds since Epoch, in UTC but not accounting for leap seconds,
+by default. If \fIclockname\fP is specifed, \fItimepoint\fP is
+the number of seconds since the zerotime of that clock.
+\fItimepoint\fP may be an arbitrary floating point number.
+Pause is continued when interrupted.
+.PP
+On Linux 4.2.2 the clocks that can be used are:
+.TP
+*
+\fBCLOCK_REALTIME\fP
+.TP
+*
+\fBCLOCK_MONOTONIC\fP
+.TP
+*
+\fBCLOCK_BOOTTIME\fP
+.TP
+*
+\fBCLOCK_REALTIME_ALARM\fP
+.TP
+*
+\fBCLOCK_BOOTTIME_ALARM\fP
+.PP
+Note that the neither course clocks, \fBCLOCK_MONOTONIC_RAW\fP
+(the proper implementation of a monotonic clock), and
+\fBCLOCK_TAI\fP does not work.
+.SH EXIT STATUS
+.TP
+0
+The command was successful.
+.TP
+1
+The command failed.
+.SH SEE ALSO
+.BR sleep (1),
+.BR date (1),
+.BR clock_gettime (3)

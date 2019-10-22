@@ -3,6 +3,7 @@ RUNTIME DEPENDENCIES:
 	linux>=2.6.25
 	libc (glibc>=2.8)
 
+
 BUILD DEPENDENCIES:
 
 	libc (glibc>=2.8)
@@ -10,13 +11,11 @@ BUILD DEPENDENCIES:
 	make
 	coreutils
 	grep
-	gpp (https://github.com/maandree/gpp)
-	texinfo (opt-out, for info, pdf, ps and dvi manuals)
-	texlive-core (opt-in, for pdf, ps and dvi manuals)
+	sed
 	auto-auto-complete (out-put, for shell tab-compeltion)
+
 
 INSTALL DEPENDENCIES:
 
 	make
 	coreutils
-
