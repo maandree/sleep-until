@@ -10,7 +10,6 @@ BUILD DEPENDENCIES:
 	cc
 	make
 	coreutils
-	grep
 	sed
 	auto-auto-complete (out-put, for shell tab-compeltion)
 
