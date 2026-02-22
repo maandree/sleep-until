@@ -7,7 +7,7 @@ SYNOPSIS
 DESCRIPTION
 	Pause until TIMEPOINT. TIMEPOINT is the number of seconds
 	since Epoch, in UTC but not accounting for leap seconds,
-	by default. If CLOCKNAME is specifed, TIMEPOINT is the
+	by default. If CLOCKNAME is specified, TIMEPOINT is the
 	number of seconds since the zerotime of that clock.
 	TIMEPOINT may be an arbitrary floating point number.
 	Pause is continued when interrupted.
@@ -18,17 +18,17 @@ DESCRIPTION
 	* CLOCK_BOOTTIME
 	* CLOCK_REALTIME_ALARM
 	* CLOCK_BOOTTIME_ALARM
-	Note that the neither course clocks, CLOCK_MONOTONIC_RAW
-	(the proper implementation of a monotonic clock), and
-	CLOCK_TAI does not work.
+	Note that the neither the coarse clocks, CLOCK_MONOTONIC_RAW
+	(the proper implementation of a monotonic clock), nor
+	CLOCK_TAI work.
 
 RATIONALE
-	Previously, the best wait to sleep until a specific time
+	Previously, the best way to sleep until a specific time
 	was to use date, sleep, and arithmetics in Bash. This is
-	very inconvenient, and only allows sleep over a monotonic
+	very inconvenient, and only allows sleep on a monotonic
 	clock.
 
-	This progam was written so that the author could combine
+	This program was written so that the author could combine
 	it with mplayer to construct a custom alarm clock.
 
 SEE ALSO

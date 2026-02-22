@@ -9,7 +9,7 @@ sleep-until - sleep until a specified time
 .SH DESCRIPTION
 Pause until \fItimepoint\fP. \fItimepoint\fP is the number of
 seconds since Epoch, in UTC but not accounting for leap seconds,
-by default. If \fIclockname\fP is specifed, \fItimepoint\fP is
+by default. If \fIclockname\fP is specified, \fItimepoint\fP is
 the number of seconds since the zerotime of that clock.
 \fItimepoint\fP may be an arbitrary floating point number.
 Pause is continued when interrupted.
@@ -31,9 +31,9 @@ On Linux 4.2.2 the clocks that can be used are:
 *
 \fBCLOCK_BOOTTIME_ALARM\fP
 .PP
-Note that the neither course clocks, \fBCLOCK_MONOTONIC_RAW\fP
-(the proper implementation of a monotonic clock), and
-\fBCLOCK_TAI\fP does not work.
+Note that the neither the coarse clocks, \fBCLOCK_MONOTONIC_RAW\fP
+(the proper implementation of a monotonic clock), nor
+\fBCLOCK_TAI\fP work.
 .SH EXIT STATUS
 .TP
 0

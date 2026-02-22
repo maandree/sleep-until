@@ -11,7 +11,8 @@ zsh: sleep-until.zsh
 fish: sleep-until.fish
 
 clocks.h:
-	sed -n 's/^[ \t]*#[ \t]*define[ \t][ \t]*\(CLOCK_[^ \t]*\).*$$/X(\1)/p' < /usr/include/bits/time.h > $@
+	sed -n 's/^[ \t]*#[ \t]*define[ \t][ \t]*\(CLOCK_[^ \t]*\).*$$/X(\1)/p' < $(CLOCK_HEADER_FILE) | \
+		sed '/X(CLOCK_SGI_CYCLE)/d' > $@
 
 sleep-until.o: sleep-until.c clocks.h
 	$(CC) -c -o $@ $< $(CFLAGS) $(CPPFLAGS)
@@ -63,6 +64,6 @@ uninstall:
 	-rmdir -- "$(DESTDIR)$(PREFIX)/share/bash-completion"
 
 clean:
-	-rm -f -- sleep-until *.o clocks.h *.bash *.zsh *.fish
+	-rm -f -- sleep-until *.o *.su clocks.h *.bash *.zsh *.fish
 
-.PHONY: all base shell bash zsh fish install install-base install-shell install-base install-zsh install-fish uninstall clean
+.PHONY: all base shell bash zsh fish install install-base install-shell install-zsh install-fish uninstall clean

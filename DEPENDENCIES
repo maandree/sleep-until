@@ -7,11 +7,11 @@ RUNTIME DEPENDENCIES:
 BUILD DEPENDENCIES:
 
 	libc (glibc>=2.8)
-	cc
+	c99
 	make
 	coreutils
 	sed
-	auto-auto-complete (out-put, for shell tab-compeltion)
+	auto-auto-complete (opt-out, for shell tab-completion)
 
 
 INSTALL DEPENDENCIES:
